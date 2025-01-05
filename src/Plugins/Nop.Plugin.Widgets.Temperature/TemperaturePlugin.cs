@@ -8,7 +8,7 @@ public class TemperaturePlugin : BasePlugin, IWidgetPlugin
 {
     public bool HideInWidgetList => false;
 
-    public Type GetWidgetViewComponent(string widgetZone)
+    public Type GetWidgetViewComponent(string widgetZone)   
     {
         return typeof(TemperatureViewComponent);
     }

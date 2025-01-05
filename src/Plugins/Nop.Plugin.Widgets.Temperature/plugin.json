@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Temperature",
+  "SystemName": "Widgets.Temperature",
+  "Version": "4.70.2",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Emirates Auction team",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Widgets.Temperature.dll",
+  "Description": "This plugin allows you to view the temperature"
+}
