@@ -16,6 +16,6 @@ public class TemperatureWidgetViewComponent : NopViewComponent
         {
             Value = 19.5
         };
-        return View("~/Plugins/Widgets.Temperature/Views/PublicInfo.cshtml", model);
+        return Content($"Temperature is: {model.Value}");
     }
 }

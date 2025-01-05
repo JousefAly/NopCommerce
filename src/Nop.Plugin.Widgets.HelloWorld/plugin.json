@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Hello World",
+  "SystemName": "Widgets.HelloWorld",
+  "Version": "4.70.2",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Yousef Aly",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Widgets.HelloWorld.dll",
+  "Description": "This plugin allows you to view Hello World"
+}
