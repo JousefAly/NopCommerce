@@ -1,5 +1,5 @@
 ﻿namespace Nop.Plugin.Widgets.Temperature.Models;
-public class Temperature
+public class TemperatureModel
 {
     public double Value { get; set; }
 }

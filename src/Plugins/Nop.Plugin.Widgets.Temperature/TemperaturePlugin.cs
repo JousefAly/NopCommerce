@@ -10,7 +10,7 @@ public class TemperaturePlugin : BasePlugin, IWidgetPlugin
 
     public Type GetWidgetViewComponent(string widgetZone)   
     {
-        return typeof(TemperatureViewComponent);
+        return typeof(TemperatureWidgetViewComponent);
     }
 
     public async Task<IList<string>> GetWidgetZonesAsync()
