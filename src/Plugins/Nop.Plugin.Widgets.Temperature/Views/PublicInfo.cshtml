@@ -1,4 +1,48 @@
 @using Nop.Plugin.Widgets.Temperature.Models
 @model TemperatureModel
 
-<h2>Temperature is @Model.Value</h2>
+<style>
+    .temperature-widget {
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        max-width: 300px;
+        margin: 20px auto;
+    }
+
+    .temperature-label {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+
+    .temperature-location {
+        font-size: 1rem;
+        color: #495057;
+        margin-bottom: 15px;
+    }
+
+    .temperature-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #0d6efd;
+    }
+</style>
+<div class="temperature-widget">
+    <h2 class="temperature-label">Current Temperature</h2>
+    <p class="temperature-location">Location: Cairo</p>
+    <p class="temperature-value">
+        @if (Model.Value != null)
+        {
+            @Model.Value <span> &#176;C</span>
+        }
+        else
+        {
+            <span>Unable to retrieve temperature data.</span>
+        }
+    </p>
+</div>
+
+
