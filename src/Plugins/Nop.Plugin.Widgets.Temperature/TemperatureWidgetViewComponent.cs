@@ -22,11 +22,12 @@ public class TemperatureWidgetViewComponent : NopViewComponent
         return View("~/Plugins/Widgets.Temperature/Views/PublicInfo.cshtml", model);
     }
 
+    //should be a service in the plugin
     private async Task<double?> GetCurrentTemperatureAsync()
     {
-        string apiKey = "36c9ac984bc4c2c4d826f5ddf66ad23e";
+        string apiKey = "36c9ac984bc4c2c4d826f5ddf66ad23e"; //configuration
         HttpClient httpClient = new HttpClient();        
-        string url = $"https://api.openweathermap.org/data/2.5/weather?lat=30.04&lon=31.14&appid={apiKey}";
+        string url = $"https://api.openweathermap.org/data/2.5/weather?lat=30.04&lon=31.14&appid={apiKey}"; //configuration
 
         HttpResponseMessage response = await httpClient.GetAsync(url);
         if (response.IsSuccessStatusCode)
