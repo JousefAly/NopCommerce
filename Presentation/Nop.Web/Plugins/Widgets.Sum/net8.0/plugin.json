@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Sum",
+  "SystemName": "Widgets.Sum",
+  "Version": "4.70.2",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Emirates Auction team",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Widgets.Sum.dll",
+  "Description": "This plugin allows you to sum numbers"
+}

@@ -4,7 +4,7 @@ using Nop.Web.Framework.Components;
 
 namespace Nop.Plugin.Widgets.Sum.Components;
 
-[ViewComponent(Name = "TemperatureWidget")]
+[ViewComponent(Name = "Sum")]
 public class SumComponent : NopViewComponent
 {
 
