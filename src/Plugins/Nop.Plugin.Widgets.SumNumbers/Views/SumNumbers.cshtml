@@ -1,0 +1,25 @@
+@using Nop.Plugin.Widgets.SumNumbers.Models
+@model SumCalculatorModel
+
+<h2>Sum Calculator</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Number1)
+        @Html.TextBoxFor(model => model.Number1, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Number2)
+        @Html.TextBoxFor(model => model.Number2, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+}
+
+@if (Model.Result != 0)
+{
+    <div class="form-group">
+        <label>Result:</label>
+        <span>@Model.Result</span>
+    </div>
+}
