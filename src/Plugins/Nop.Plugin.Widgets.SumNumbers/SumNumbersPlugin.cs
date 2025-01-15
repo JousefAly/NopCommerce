@@ -16,6 +16,6 @@ public class SumNumbersPlugin : BasePlugin, IWidgetPlugin
 
     public async Task<IList<string>> GetWidgetZonesAsync()
     {
-        return new List<string> { PublicWidgetZones.HeaderAfter };
+        return new List<string> { PublicWidgetZones.HomepageBottom };
     }
 }

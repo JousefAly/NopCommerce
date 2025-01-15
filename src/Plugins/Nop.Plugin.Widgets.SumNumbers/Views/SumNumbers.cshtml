@@ -3,23 +3,30 @@
 
 <h2>Sum Calculator</h2>
 
-@using (Html.BeginForm())
-{
-    <div class="form-group">
-        @Html.LabelFor(model => model.Number1)
-        @Html.TextBoxFor(model => model.Number1, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Number2)
-        @Html.TextBoxFor(model => model.Number2, new { @class = "form-control" })
-    </div>
-    <button type="submit" class="btn btn-primary">Calculate</button>
-}
 
-@if (Model.Result != 0)
-{
-    <div class="form-group">
-        <label>Result:</label>
-        <span>@Model.Result</span>
-    </div>
-}
+<div class="form-group">
+    @Html.LabelFor(model => model.Number1)
+    @Html.TextBoxFor(model => model.Number1, new { @class = "form-control", id = "Number1", type = "number" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(model => model.Number2)
+    @Html.TextBoxFor(model => model.Number2, new { @class = "form-control", id = "Number2", type = "number" })
+</div>
+<button type="button" class="btn btn-primary" onclick="calculateSum()">Sum</button>
+
+<div class="form-group" id="resultContainer" style="display: none;">
+    <label>Result:</label>
+    <span id="result"></span>
+</div>
+
+<script>
+    function calculateSum() {        
+        const number1 = parseFloat(document.getElementById('Number1').value) || 0;
+        const number2 = parseFloat(document.getElementById('Number2').value) || 0;
+        
+        const result = number1 + number2;
+        
+        document.getElementById('result').textContent = result;
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+</script>
