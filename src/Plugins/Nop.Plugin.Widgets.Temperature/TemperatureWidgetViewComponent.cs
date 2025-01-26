@@ -14,7 +14,8 @@ public class TemperatureWidgetViewComponent : NopViewComponent
     public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
     {
         double? temperature = await GetCurrentTemperatureAsync();
-        temperature -= 273.15; //convert kelvin to celsius
+        
+        temperature -= 273.15; //convert kelvin to celsius        
         var model = new TemperatureModel
         {
             Value = (double?)(int?)temperature ?? 21
