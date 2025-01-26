@@ -1,48 +1,226 @@
-@using Nop.Plugin.Widgets.Temperature.Models
+﻿@using Nop.Plugin.Widgets.Temperature.Models
 @model TemperatureModel
 
 <style>
-    .temperature-widget {
-        background: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: center;
-        max-width: 300px;
-        margin: 20px auto;
+    @@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+    :root {
+        --temp-color: #3498db;
     }
 
+    .temperature-widget {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        border-radius: 25px;
+        padding: 35px;
+        max-width: 350px;
+        margin: 20px auto;
+        position: relative;
+        overflow: hidden;
+        transform: translateY(0);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        animation: widgetEntrance 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+        .temperature-widget::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient( 45deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75% );
+            animation: dynamicFlow 20s infinite linear;
+            opacity: 0.4;
+        }
+
+        .temperature-widget::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 23px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+        }
+
     .temperature-label {
-        font-size: 1.2rem;
-        color: #6c757d;
-        margin-bottom: 5px;
+        font-size: 1.5rem;
+        color: white;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        animation: textFloat 3s ease-in-out infinite;
     }
 
     .temperature-location {
-        font-size: 1rem;
-        color: #495057;
-        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 25px;
+        position: relative;
+        z-index: 2;
+        animation: fadeInUp 0.6s 0.3s ease backwards;
     }
 
     .temperature-value {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #0d6efd;
+        font-size: 4rem;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        animation: tempGlow 2s infinite alternate;
+    }
+
+        .temperature-value i {
+            font-size: 3rem;
+            animation: thermometerFloat 3s ease-in-out infinite;
+        }
+
+    .particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @@keyframes widgetEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(30px) rotate(3deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) rotate(0);
+        }
+    }
+
+    @@keyframes dynamicFlow {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes tempGlow {
+        from {
+            filter: drop-shadow(0 0 5px var(--temp-color));
+        }
+
+        to {
+            filter: drop-shadow(0 0 20px var(--temp-color));
+        }
+    }
+
+    @@keyframes thermometerFloat {
+        0%, 100% {
+            transform: translateY(0) rotate(-5deg);
+        }
+
+        50% {
+            transform: translateY(-10px) rotate(5deg);
+        }
+    }
+
+    @@keyframes textFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-3px);
+        }
+    }
+
+    @@keyframes particleMove {
+        from {
+            transform: translateY(0) scale(0);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(-100px) scale(1);
+            opacity: 0.6;
+        }
+    }
+
+    /* Dynamic temperature color */
+    .temperature-value[data-temp="hot"] {
+        --temp-color: #ff4757;
+    }
+
+    .temperature-value[data-temp="cold"] {
+        --temp-color: #2ed573;
+    }
+
+    .temperature-value[data-temp="normal"] {
+        --temp-color: #3498db;
     }
 </style>
-<div class="temperature-widget">
-    <h2 class="temperature-label">Current Temperature</h2>
-    <p class="temperature-location">Location: Cairo</p>
-    <p class="temperature-value">
+
+<div class="temperature-widget" id="tempWidget">
+    <div class="particles"></div>
+    <h2 class="temperature-label">🌡 Current Temperature</h2>
+    <p class="temperature-location">📍 Cairo</p>
+    <p class="temperature-value" data-temp="@(Model.Value > 30 ? "hot" : Model.Value < 15 ? "cold" : "normal")">
         @if (Model.Value != null)
         {
-            @Model.Value <span> &#176;C</span>
+            <i class="fas fa-thermometer-half"></i>
+            @Model.Value
+
+            <span>°C</span>
         }
         else
         {
-            <span>Unable to retrieve temperature data.</span>
+            <span class="error-message">⚠️ Connection Error</span>
         }
     </p>
 </div>
 
+<script>
+    // Add dynamic particles
+    function createParticles() {
+        const particles = document.querySelector('.particles');
+        const particleCount = 20;
 
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: absolute;
+                width: ${Math.random() * 4 + 2}px;
+                height: ${Math.random() * 4 + 2}px;
+                background: rgba(255,255,255,${Math.random() * 0.5});
+                border-radius: 50%;
+                left: ${Math.random() * 100}%;
+                animation: particleMove ${Math.random() * 3 + 2}s infinite linear;
+                animation-delay: ${Math.random() * 2}s;
+            `;
+            particles.appendChild(particle);
+        }
+    }
+
+    // Add parallax effect
+    document.getElementById('tempWidget').addEventListener('mousemove', (e) => {
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        e.currentTarget.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Reset rotation on mouse leave
+    document.getElementById('tempWidget').addEventListener('mouseleave', (e) => {
+        e.currentTarget.style.transform = 'rotateY(0) rotateX(0)';
+    });
+
+    // Initialize particles
+    createParticles();
+</script>
