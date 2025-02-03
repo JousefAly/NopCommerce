@@ -2,7 +2,7 @@
   "Group": "Payment methods",
   "FriendlyName": "Stripe Custom",
   "SystemName": "Payments.StripeCustom",
-  "Version": "4.70.6",
+  "Version": "4.70.0",
   "SupportedVersions": [ "4.70" ],
   "Author": "EA team",
   "DisplayOrder": -1,
