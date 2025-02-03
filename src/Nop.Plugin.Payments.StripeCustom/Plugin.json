@@ -1,0 +1,11 @@
+{
+  "Group": "Payment methods",
+  "FriendlyName": "Stripe Custom",
+  "SystemName": "Payments.StripeCustom",
+  "Version": "4.70.6",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "EA team",
+  "DisplayOrder": -1,
+  "FileName": "Nop.Plugin.Payments.StripeCustom.dll",
+  "Description": "Stripe Platform is a full-stack payment processing solution that helps you accept and make payments globally"
+}
