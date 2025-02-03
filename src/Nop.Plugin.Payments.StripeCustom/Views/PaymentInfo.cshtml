@@ -1,0 +1,98 @@
+@model StripePaymentModel
+
+<div class="stripe-payment">
+    <form id="payment-form" method="post" asp-controller="Checkout" asp-action="Confirm" asp-route-paymentmethod="StripeCustom">
+        <div class="form-group">
+            <div id="card-element" class="form-control">
+                <!-- Stripe card elements will be inserted here -->
+            </div>
+            <div id="card-errors" class="text-danger" role="alert"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit-button">
+            <span id="button-text">@T("Checkout.Button")</span>
+            <span id="button-text">@T"Checkout.Button"</span>
+            <span id="button-spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+        </button>
+    </form>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    (function () {
+        'use strict';
+
+        var stripe = Stripe('@Html.Raw(Model.PublishableKey)');
+        var elements = stripe.elements();
+
+        var style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
+
+        var cardElement = elements.create('card', { style: style });
+        cardElement.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        var errorDiv = document.getElementById('card-errors');
+        var submitButton = document.getElementById('submit-button');
+        var buttonText = document.getElementById('button-text');
+        var buttonSpinner = document.getElementById('button-spinner');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            submitButton.disabled = true;
+            buttonText.style.display = 'none';
+            buttonSpinner.style.display = 'inline-block';
+            errorDiv.textContent = '';
+
+            try {
+                const { error, paymentIntent } = await stripe.confirmCardPayment('@Model.ClientSecret', {
+                    payment_method: {
+                        card: cardElement
+                    }
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                if (paymentIntent.status === 'succeeded') {
+                    // Add payment intent ID to form and submit
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'paymentIntentId';
+                    input.value = paymentIntent.id;
+                    form.appendChild(input);
+                    form.submit();
+                }
+            } catch (error) {
+                console.error('Stripe error:', error);
+                errorDiv.textContent = error.message || '@T("Plugins.Payments.StripeCustom.PaymentError")';
+                submitButton.disabled = false;
+                buttonText.style.display = 'inline-block';
+                buttonSpinner.style.display = 'none';
+            }
+        });
+
+        // Handle real-time validation errors on the card element
+        cardElement.addEventListener('change', function (event) {
+            if (event.error) {
+                errorDiv.textContent = event.error.message;
+            } else {
+                errorDiv.textContent = '';
+            }
+        });
+    })();
+</script>
