@@ -9,8 +9,8 @@
             <div id="card-errors" class="text-danger" role="alert"></div>
         </div>
         <button type="submit" class="btn btn-primary" id="submit-button">
-            <span id="button-text">@T("Checkout.Button")</span>
-            <span id="button-text">@T"Checkout.Button"</span>
+            <span id="button-text">Checkout</span>
+            <span id="button-text">Checkout</span>
             <span id="button-spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
         </button>
     </form>
@@ -79,7 +79,7 @@
                 }
             } catch (error) {
                 console.error('Stripe error:', error);
-                errorDiv.textContent = error.message || '@T("Plugins.Payments.StripeCustom.PaymentError")';
+                errorDiv.textContent = error.message || 'payment error';
                 submitButton.disabled = false;
                 buttonText.style.display = 'inline-block';
                 buttonSpinner.style.display = 'none';
