@@ -34,7 +34,7 @@ public class StripeCustomPaymentProcessor : BasePlugin, IPaymentMethod
         _orderService = orderService;
         _localizationService = localizationService;
         _stripeSettings = _settingService.LoadSetting<StripeSettings>();
-        StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+        StripeConfiguration.ApiKey = "pk_test_51QlpoxGIYp5gF2nJgK4rwrgW2aDiIinlBhiYhtgdnpD6M8vouHsExr3s81pWQgGECXjWCMSBZtimMwa9LwKMbz7H00lMkvmA1n";
     }
 
     #region Properties
