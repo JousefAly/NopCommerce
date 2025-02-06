@@ -3,4 +3,5 @@ public class StripePaymentModel
 {
     public string PublishableKey { get; set; }
     public string ClientSecret { get; set; }
+    public double Amount { get; set; }
 }
