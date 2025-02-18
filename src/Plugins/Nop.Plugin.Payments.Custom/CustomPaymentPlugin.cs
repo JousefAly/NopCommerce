@@ -8,48 +8,76 @@ namespace Nop.Plugin.Payments.Custom;
 
 public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 {
-    public bool SupportCapture => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a value indicating whether capture is supported
+    /// </summary>
+    public bool SupportCapture => false;
 
-    public bool SupportPartiallyRefund => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a value indicating whether void is supported
+    /// </summary>
+    public bool SupportVoid => false;
 
-    public bool SupportRefund => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a value indicating whether refund is supported
+    /// </summary>
+    public bool SupportRefund => false;
 
-    public bool SupportVoid => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a value indicating whether partial refund is supported
+    /// </summary>
+    public bool SupportPartiallyRefund => false;
 
-    public RecurringPaymentType RecurringPaymentType => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a recurring payment type of payment method
+    /// </summary>
+    public RecurringPaymentType RecurringPaymentType => RecurringPaymentType.NotSupported;
 
-    public PaymentMethodType PaymentMethodType => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a payment method type
+    /// </summary>
+    public PaymentMethodType PaymentMethodType => PaymentMethodType.Standard;
 
-    public bool SkipPaymentInfo => throw new NotImplementedException();
+    /// <summary>
+    /// Gets a value indicating whether we should display a payment information page for this plugin
+    /// </summary>
+    public bool SkipPaymentInfo => false;
+
+    /// <summary>
+    /// Gets a value indicating whether to hide this plugin on the widget list page in the admin area
+    /// </summary>
+    public bool HideInWidgetList => false;
+
 
     public Task<CancelRecurringPaymentResult> CancelRecurringPaymentAsync(CancelRecurringPaymentRequest cancelPaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new CancelRecurringPaymentResult { Errors = new[] { "Recurring payment not supported" } });
     }
 
     public Task<bool> CanRePostProcessPaymentAsync(Order order)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(order);
+        return Task.FromResult(false);
     }
 
     public Task<CapturePaymentResult> CaptureAsync(CapturePaymentRequest capturePaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new CapturePaymentResult { Errors = new[] { "capture payment not supported" } });
     }
 
     public Task<decimal> GetAdditionalHandlingFeeAsync(IList<ShoppingCartItem> cart)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(155.5m);
     }
 
     public Task<ProcessPaymentRequest> GetPaymentInfoAsync(IFormCollection form)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new ProcessPaymentRequest());
     }
 
     public Task<string> GetPaymentMethodDescriptionAsync()
     {
-        throw new NotImplementedException();
+        return Task.FromResult("custom payment discription");
     }
 
     public Type GetPublicViewComponent()
@@ -57,35 +85,36 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
         return typeof(PaymentInfoViewComponent);
     }
 
-    public Task<bool> HidePaymentMethodAsync(IList<ShoppingCartItem> cart)
+    public async Task<bool> HidePaymentMethodAsync(IList<ShoppingCartItem> cart)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(true);
     }
 
     public override Task InstallAsync()
     {
         Console.WriteLine("installing custom payment plugin");
-        return base.InstallAsync(); 
+        return base.InstallAsync();
     }
 
     public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
     {
-        throw new NotImplementedException();
+        //nothing
+        return Task.CompletedTask;
     }
 
     public Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new ProcessPaymentResult());
     }
 
     public Task<ProcessPaymentResult> ProcessRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new ProcessPaymentResult { Errors = new[] { "Recurring payment not supported" } });
     }
 
     public Task<RefundPaymentResult> RefundAsync(RefundPaymentRequest refundPaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new RefundPaymentResult { Errors = new[] { "Capture method not supported" } });
     }
 
     public override Task UninstallAsync()
@@ -95,11 +124,11 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
     public Task<IList<string>> ValidatePaymentFormAsync(IFormCollection form)
     {
-        throw new NotImplementedException();
+        return Task.FromResult<IList<string>>(new List<string>());
     }
 
     public Task<VoidPaymentResult> VoidAsync(VoidPaymentRequest voidPaymentRequest)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(new VoidPaymentResult { Errors = new[] { "void payment not supported" } });
     }
 }

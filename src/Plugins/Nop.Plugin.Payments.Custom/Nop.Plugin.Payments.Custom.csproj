@@ -14,6 +14,9 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\PaymentInfo.cshtml" />
+  </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
@@ -22,6 +25,9 @@
   <ItemGroup>
     <Content Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\PaymentInfo.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content> 
   </ItemGroup>
   <!-- This target executes after "Build" target -->
