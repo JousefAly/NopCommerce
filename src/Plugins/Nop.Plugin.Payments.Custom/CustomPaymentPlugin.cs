@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Orders;
+using Nop.Plugin.Payments.Custom.Components;
 using Nop.Services.Payments;
 using Nop.Services.Plugins;
 
@@ -53,7 +54,7 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
     public Type GetPublicViewComponent()
     {
-        throw new NotImplementedException();
+        return typeof(PaymentInfoViewComponent);
     }
 
     public Task<bool> HidePaymentMethodAsync(IList<ShoppingCartItem> cart)
