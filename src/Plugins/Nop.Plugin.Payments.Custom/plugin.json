@@ -1,0 +1,11 @@
+{
+  "Group": "Payment methods",
+  "FriendlyName": "Custom Payment",
+  "SystemName": "Payments.Custom",
+  "Version": "4.70.3",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "EA team",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.Custom.dll",
+  "Description": "This plugin enables custom payment"
+}
