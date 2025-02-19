@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Orders;
 using Nop.Plugin.Payments.Custom.Components;
+using Nop.Plugin.Payments.Stripe;
 using Nop.Services.Payments;
 using Nop.Services.Plugins;
+using Stripe;
 
 namespace Nop.Plugin.Payments.Custom;
 
@@ -107,9 +109,30 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
         //do some stuff here to complete the payment
 
+        //long amount = (long)(processPaymentRequest.OrderTotal * 100);
+
+        //StripeConfiguration.ApiKey = "sk_test_51QlpoxGIYp5gF2nJhM5rQ7sKwWsh8nGVQsxlLPy8esDRUMchXb9KnaoQcAALQFwyXRY8miaAa8bQkBo9BcFXsPkT00nWZMefXS";
+
+        //var amountInCents = (long)(amount * 100);
+
+        //var options = new PaymentIntentCreateOptions
+        //{
+        //    Amount = amountInCents,
+        //    Currency = "usd",
+        //    PaymentMethodTypes = new List<string> { "card" }
+        //};
+
+        //var service = new PaymentIntentService();
+        //var paymentIntent = service.Create(options);
+
+
+        //inject as a service
+        var stripePaymentProcessor = new StripePaymentProcessor();
+
+        stripePaymentProcessor.ProcessPayment(processPaymentRequest);
+
+
         Console.WriteLine("Order with total amount: " + processPaymentRequest.OrderTotal + "is paid to an external payment gateway.");
-
-
         return Task.FromResult(new ProcessPaymentResult());
     }
 

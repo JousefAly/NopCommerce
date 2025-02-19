@@ -30,6 +30,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content> 
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Stripe.net" Version="47.3.0" />
+  </ItemGroup>
   <!-- This target executes after "Build" target -->
   <Target Name="NopTarget" AfterTargets="Build">
     <!-- Delete unnecessary libraries from plugins path -->
