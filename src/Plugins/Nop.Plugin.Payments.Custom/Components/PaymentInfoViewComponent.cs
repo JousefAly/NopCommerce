@@ -37,6 +37,9 @@ public class PaymentInfoViewComponent : NopViewComponent
         {
             Amount = 3500
         };
+
+
+
         return View("~/Plugins/Payments.Custom/Views/PaymentInfo.cshtml", model);
     }
 

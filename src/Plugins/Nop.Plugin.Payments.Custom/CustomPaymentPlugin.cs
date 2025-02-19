@@ -36,7 +36,7 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
     /// <summary>
     /// Gets a payment method type
     /// </summary>
-    public PaymentMethodType PaymentMethodType => PaymentMethodType.Standard;
+    public PaymentMethodType PaymentMethodType => PaymentMethodType.Redirection;
 
     /// <summary>
     /// Gets a value indicating whether we should display a payment information page for this plugin
@@ -104,6 +104,12 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
     public Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest)
     {
+
+        //do some stuff here to complete the payment
+
+        Console.WriteLine("Order with total amount: " + processPaymentRequest.OrderTotal + "is paid to an external payment gateway.");
+
+
         return Task.FromResult(new ProcessPaymentResult());
     }
 
