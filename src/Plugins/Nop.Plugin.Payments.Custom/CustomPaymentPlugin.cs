@@ -87,7 +87,7 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
     public async Task<bool> HidePaymentMethodAsync(IList<ShoppingCartItem> cart)
     {
-        return await Task.FromResult(true);
+        return await Task.FromResult(false);
     }
 
     public override Task InstallAsync()
