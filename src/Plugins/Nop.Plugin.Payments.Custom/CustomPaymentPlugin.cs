@@ -10,6 +10,12 @@ namespace Nop.Plugin.Payments.Custom;
 
 public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public CustomPaymentPlugin(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
     /// <summary>
     /// Gets a value indicating whether capture is supported
     /// </summary>
@@ -100,7 +106,9 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 
     public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
     {
-        //nothing
+
+
+
         return Task.CompletedTask;
     }
 
@@ -130,8 +138,11 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
         var stripePaymentProcessor = new StripePaymentProcessor();
 
         stripePaymentProcessor.ProcessPayment(processPaymentRequest);
+        string checkoutUrl = (string)processPaymentRequest.CustomValues["checkoutUrl"];
 
+        //try to figure out redirect here
 
+        _httpContextAccessor.HttpContext.Request..Redirect(checkoutUrl);
         Console.WriteLine("Order with total amount: " + processPaymentRequest.OrderTotal + "is paid to an external payment gateway.");
         return Task.FromResult(new ProcessPaymentResult());
     }

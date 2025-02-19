@@ -12,7 +12,7 @@ namespace Nop.Plugin.Payments.Stripe
         public StripePaymentProcessor()
         {
             // Load from plugin settings
-            _stripeSecretKey = "sk_test_51QlpoxGIYp5gF2nJhM5rQ7sKwWsh8nGVQsxlLPy8esDRUMchXb9KnaoQcAALQFwyXRY8miaAa8bQkBo9BcFXsPkT00nWZMefXS"; 
+            _stripeSecretKey = "sk_test_51QlpoxGIYp5gF2nJhM5rQ7sKwWsh8nGVQsxlLPy8esDRUMchXb9KnaoQcAALQFwyXRY8miaAa8bQkBo9BcFXsPkT00nWZMefXS";
             StripeConfiguration.ApiKey = _stripeSecretKey;
         }
 
@@ -38,23 +38,26 @@ namespace Nop.Plugin.Payments.Stripe
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://yourdomain.com/checkout/completed", // Redirect after success
-                CancelUrl = "https://yourdomain.com/checkout/cancel",  // Redirect after cancel
+                SuccessUrl = "https://localhost:44369/", // Redirect after success
+                CancelUrl = "https://localhost:44369/",  // Redirect after cancel
             };
 
             var service = new SessionService();
             Session session = service.Create(options);
 
+
+            processPaymentRequest.CustomValues.Add("checkoutUrl", session.Url);
+
             return new ProcessPaymentResult
             {
                 NewPaymentStatus = PaymentStatus.Pending,
-                //RedirectUrl = session.Url // Redirect to Stripe checkout
+                                
             };
-        }
+}
 
-        public void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
-        {
-            // Handle post-payment logic (e.g., update order status)
-        }
+public void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
+{
+    // Handle post-payment logic (e.g., update order status)
+}
     }
 }
