@@ -40,7 +40,11 @@ namespace Nop.Plugin.Payments.Stripe
                 },
                 Mode = "payment",
                 SuccessUrl = "https://localhost:44369/checkout/completed/",
-                CancelUrl = "https://localhost:44369/"
+                CancelUrl = "https://localhost:44369/",
+                Metadata = new Dictionary<string, string>
+            {
+                { "OrderId", processPaymentRequest.OrderGuid.ToString() } // Send Order ID in metadata
+            }
             };
 
             var service = new SessionService();
@@ -54,6 +58,6 @@ namespace Nop.Plugin.Payments.Stripe
                 NewPaymentStatus = PaymentStatus.Pending,
 
             };
-        }      
+        }
     }
 }
