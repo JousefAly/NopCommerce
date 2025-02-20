@@ -12,13 +12,11 @@ namespace Nop.Plugin.Payments.Custom;
 
 public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IGenericAttributeService _genericAttributeService;
+    private readonly IHttpContextAccessor _httpContextAccessor;    
 
     public CustomPaymentPlugin(IHttpContextAccessor httpContextAccessor, IGenericAttributeService genericAttributeService)
     {
-        _httpContextAccessor = httpContextAccessor;
-        _genericAttributeService = genericAttributeService;
+        _httpContextAccessor = httpContextAccessor;        
     }
     /// <summary>
     /// Gets a value indicating whether capture is supported
