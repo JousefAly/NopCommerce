@@ -38,7 +38,7 @@ namespace Nop.Plugin.Payments.Stripe
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:44369/", // Redirect after success
+                SuccessUrl = "https://localhost:44369/checkout/completed/", // Redirect after success
                 CancelUrl = "https://localhost:44369/",  // Redirect after cancel
             };
 

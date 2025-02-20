@@ -112,6 +112,7 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
     {
 
         //extract checkoutUrl
+        //so checkout url has to be stored in another storage than custom values because custom values is rendered in the order and order pdf invoice.
 
         XDocument doc = XDocument.Parse(postProcessPaymentRequest.Order.CustomValuesXml);
 
