@@ -40,7 +40,7 @@ namespace Nop.Plugin.Payments.Stripe
                 },
                 Mode = "payment",
                 SuccessUrl = "https://localhost:44369/checkout/completed/",
-                CancelUrl = "https://localhost:44369/",
+                CancelUrl = "https://localhost:44369/"
             };
 
             var service = new SessionService();

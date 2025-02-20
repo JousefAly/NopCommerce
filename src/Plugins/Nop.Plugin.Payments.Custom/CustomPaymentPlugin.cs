@@ -6,7 +6,6 @@ using Nop.Plugin.Payments.Stripe;
 using Nop.Services.Common;
 using Nop.Services.Payments;
 using Nop.Services.Plugins;
-using Stripe;
 
 namespace Nop.Plugin.Payments.Custom;
 
