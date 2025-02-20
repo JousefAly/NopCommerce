@@ -12,6 +12,7 @@ namespace Nop.Plugin.Payments.Stripe
         public StripePaymentProcessor()
         {
             // Load from plugin settings
+            // Will need to see how
             _stripeSecretKey = "sk_test_51QlpoxGIYp5gF2nJhM5rQ7sKwWsh8nGVQsxlLPy8esDRUMchXb9KnaoQcAALQFwyXRY8miaAa8bQkBo9BcFXsPkT00nWZMefXS";
             StripeConfiguration.ApiKey = _stripeSecretKey;
         }
@@ -27,7 +28,7 @@ namespace Nop.Plugin.Payments.Stripe
                     {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                            UnitAmount = (long)(processPaymentRequest.OrderTotal * 100), // Convert to cents
+                            UnitAmount = (long)(processPaymentRequest.OrderTotal * 100),
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
@@ -38,8 +39,8 @@ namespace Nop.Plugin.Payments.Stripe
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:44369/checkout/completed/", // Redirect after success
-                CancelUrl = "https://localhost:44369/",  // Redirect after cancel
+                SuccessUrl = "https://localhost:44369/checkout/completed/",
+                CancelUrl = "https://localhost:44369/",
             };
 
             var service = new SessionService();
@@ -51,13 +52,8 @@ namespace Nop.Plugin.Payments.Stripe
             return new ProcessPaymentResult
             {
                 NewPaymentStatus = PaymentStatus.Pending,
-                                
-            };
-}
 
-public void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest)
-{
-    // Handle post-payment logic (e.g., update order status)
-}
+            };
+        }      
     }
 }

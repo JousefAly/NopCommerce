@@ -136,9 +136,7 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
         var stripePaymentProcessor = new StripePaymentProcessor();
 
         stripePaymentProcessor.ProcessPayment(processPaymentRequest);
-        string checkoutUrl = (string)processPaymentRequest.CustomValues["checkoutUrl"];
 
-        
         Console.WriteLine("Order with total amount: " + processPaymentRequest.OrderTotal + "is paid to an external payment gateway.");
         return Task.FromResult(new ProcessPaymentResult());
     }
