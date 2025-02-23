@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.Payments;
 using Nop.Services.Orders;
 using Stripe;
 using Stripe.Checkout;
@@ -10,7 +11,7 @@ namespace Nop.Plugin.Payments.PayPalCommerce.Controllers;
 [ApiController]
 public class StripeWebhookController : Controller
 {
-    private readonly string signingSecret = "whsec_66dff8d2ae4fcf308a2ce3441858a9f7b67f0ef1bfee7de6d64f3cc7f0a7ec5b";
+    private readonly string signingSecret = "whsec_66dff8d2ae4fcf308a2ce3441858a9f7b67f0ef1bfee7de6d64f3cc7f0a7ec5b"; //appsettings
     private readonly IOrderService _orderService;
 
     public StripeWebhookController(IOrderService orderService)
@@ -22,7 +23,7 @@ public class StripeWebhookController : Controller
     [HttpPost("webhook")]
     public async Task<IActionResult> HandleWebhook()
     {
-        //handle success payments
+
 
         var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
 
@@ -34,7 +35,7 @@ public class StripeWebhookController : Controller
               signingSecret
             );
 
-            // If on SDK version < 46, use class Events instead of EventTypes
+
             if (
               stripeEvent.Type == EventTypes.CheckoutSessionCompleted ||
               stripeEvent.Type == EventTypes.CheckoutSessionAsyncPaymentSucceeded
@@ -86,7 +87,9 @@ public class StripeWebhookController : Controller
         if (order != null && order.OrderStatus == OrderStatus.Pending)
         {
             // Update order status to Complete
-            order.OrderStatus = OrderStatus.Complete;
+            order.PaymentStatus = PaymentStatus.Paid;
+            order.PaidDateUtc = DateTime.UtcNow;
+
             await _orderService.UpdateOrderAsync(order);
         }
 

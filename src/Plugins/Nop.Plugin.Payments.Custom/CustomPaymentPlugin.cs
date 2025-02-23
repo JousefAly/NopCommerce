@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
+using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Plugin.Payments.Custom.Components;
 using Nop.Plugin.Payments.Stripe;
@@ -11,11 +12,14 @@ namespace Nop.Plugin.Payments.Custom;
 
 public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;    
-
-    public CustomPaymentPlugin(IHttpContextAccessor httpContextAccessor, IGenericAttributeService genericAttributeService)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IGenericAttributeService _genericAttributeService;
+    private readonly IWorkContext _workContext;
+    public CustomPaymentPlugin(IHttpContextAccessor httpContextAccessor, IGenericAttributeService genericAttributeService, IWorkContext workContext)
     {
-        _httpContextAccessor = httpContextAccessor;        
+        _httpContextAccessor = httpContextAccessor;
+        _genericAttributeService = genericAttributeService;
+        _workContext = workContext;
     }
     /// <summary>
     /// Gets a value indicating whether capture is supported
@@ -105,37 +109,33 @@ public class CustomPaymentPlugin : BasePlugin, IPaymentMethod
         return base.InstallAsync();
     }
 
-    public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
+    public async Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
     {
+        var customer = await _workContext.GetCurrentCustomerAsync();
 
-        //extract checkoutUrl
-        //so checkout url has to be stored in another storage than custom values because custom values is rendered in the order and order pdf invoice.
-
-        XDocument doc = XDocument.Parse(postProcessPaymentRequest.Order.CustomValuesXml);
-
-        // Find the checkoutUrl value
-        string checkoutUrl = doc.Descendants("item")
-                                .Where(x => (string)x.Element("key") == "checkoutUrl")
-                                .Select(x => (string)x.Element("value"))
-                                .FirstOrDefault()?.Trim();
+        string checkoutUrl = await _genericAttributeService.GetAttributeAsync<string>(customer, "checkoutUrl");
 
         _httpContextAccessor.HttpContext.Response.Redirect(checkoutUrl);
 
-        return Task.CompletedTask;
+        return;
     }
 
-    public Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest)
+    public async Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest)
     {
 
         //do some stuff here to complete the payment
-       
+
         //inject as a service
         var stripePaymentProcessor = new StripePaymentProcessor();
 
-        stripePaymentProcessor.ProcessPayment(processPaymentRequest);
+        var result = stripePaymentProcessor.ProcessPayment(processPaymentRequest);
 
-        Console.WriteLine("Order with total amount: " + processPaymentRequest.OrderTotal + "is paid to an external payment gateway.");
-        return Task.FromResult(new ProcessPaymentResult());
+        var customer = await _workContext.GetCurrentCustomerAsync();
+
+        await _genericAttributeService.SaveAttributeAsync(customer, "checkoutUrl", result.Item2);
+
+
+        return result.Item1;
     }
 
     public Task<ProcessPaymentResult> ProcessRecurringPaymentAsync(ProcessPaymentRequest processPaymentRequest)

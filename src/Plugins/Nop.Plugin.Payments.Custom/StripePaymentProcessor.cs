@@ -1,4 +1,5 @@
 ﻿using Nop.Core.Domain.Payments;
+using Nop.Services.Common;
 using Nop.Services.Payments;
 using Stripe;
 using Stripe.Checkout;
@@ -17,7 +18,7 @@ namespace Nop.Plugin.Payments.Stripe
             StripeConfiguration.ApiKey = _stripeSecretKey;
         }
 
-        public ProcessPaymentResult ProcessPayment(ProcessPaymentRequest processPaymentRequest)
+        public (ProcessPaymentResult, string) ProcessPayment(ProcessPaymentRequest processPaymentRequest)
         {
             var options = new SessionCreateOptions
             {
@@ -39,25 +40,22 @@ namespace Nop.Plugin.Payments.Stripe
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:44369/checkout/completed/",
-                CancelUrl = "https://localhost:44369/",
+                SuccessUrl = "https://localhost:44369/checkout/completed/", //has to be appsettings
+                CancelUrl = "https://localhost:44369/", //has to be appsettings
                 Metadata = new Dictionary<string, string>
             {
-                { "OrderId", processPaymentRequest.OrderGuid.ToString() } // Send Order ID in metadata
+                { "OrderId", processPaymentRequest.OrderGuid.ToString() }
             }
             };
 
             var service = new SessionService();
-            Session session = service.Create(options);
+            Session session = service.Create(options);                        
 
-
-            processPaymentRequest.CustomValues.Add("checkoutUrl", session.Url);
-
-            return new ProcessPaymentResult
+            return (new ProcessPaymentResult
             {
                 NewPaymentStatus = PaymentStatus.Pending,
 
-            };
+            }, session.Url);
         }
     }
 }
